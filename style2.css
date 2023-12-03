@@ -55,9 +55,20 @@ line-height: normal;
 .display{
     display: flex;
     gap:1rem;
+    margin-top: 10px;
+}
+.display>span{
+    padding: 10px;
 }
 .abc{
     width:200px;
     background-color: #270846;
     color: white;
+}
+#second{
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 220px;
 }

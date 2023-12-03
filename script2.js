@@ -38,6 +38,35 @@ async function fetchWeatherData(latitude, longitude) {
       throw error;
     }
   }  
+  function degreeToDirection(degree) {
+    if (degree >= 337.5 || degree < 22.5) {
+      return "North";
+    } else if (degree >= 22.5 && degree < 67.5) {
+      return "North East";
+    } else if (degree >= 67.5 && degree < 112.5) {
+      return "East";
+    } else if (degree >= 112.5 && degree < 157.5) {
+      return "South East";
+    } else if (degree >= 157.5 && degree < 202.5) {
+      return "South";
+    } else if (degree >= 202.5 && degree < 247.5) {
+      return "South West";
+    } else if (degree >= 247.5 && degree < 292.5) {
+      return "West";
+    } else {
+      return "North West";
+    }
+  }
+
+
+  function secondsToTimeZoneString(seconds) {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
+    const sign = hours >= 0 ? '+' : '-';
+    console.log({sign, hours: Math.abs(hours), minutes, seconds: remainingSeconds });
+    return {sign, hours: Math.abs(hours), minutes, seconds: remainingSeconds };
+  }
 
 async function fetchDataAndDisplay() {
     try {
@@ -48,8 +77,18 @@ async function fetchDataAndDisplay() {
       
       const weatherData = await fetchWeatherData(latitude, longitude);
       console.log(weatherData);
+      let time=secondsToTimeZoneString(weatherData.timezone);
+      const temp = Math.round(weatherData.main.temp );
       document.getElementById("location").innerText=`Location: ${weatherData.name}`;
       document.getElementById("windspped").innerText=`Wind Speed: ${Math.round(weatherData.wind.speed*3.6)}km/hr`
+      document.getElementById("Humidity").innerText=`Humidity: ${weatherData.main.humidity}`;
+      document.getElementById("Humidity").innerText=`Humidity: ${weatherData.main.humidity}`;
+      document.getElementById("Timezone").innerHTML=`<span>Time Zone : GMT ${time.sign}${time.hours}:${time.minutes}</span>`
+      document.getElementById("pressure").innerText=`pressure: ${weatherData.main.pressure}atm`;
+      document.getElementById("winddirection").innerText=`Wind Direction: ${degreeToDirection(weatherData.wind.deg)}`;
+      document.getElementById("Uvindex").innerText=`Uvindex: 500 atm`;
+      document.getElementById("FeelsLike").innerText=`FeelsLike: ${temp} degree`;
+
     } catch (error) {
       console.error('Error:', error.message);
     }
